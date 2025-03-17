@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PegawaiController extends Controller
 {
@@ -21,6 +22,18 @@ class PegawaiController extends Controller
         return view('formulir');
     }
     public function proses(Request $request){
+        // tambahan
+        $messages =[
+            'required' => 'Input :attribute wajib diisi!',
+            'min' => 'Input :attribute harus diisi minimal :min karakter!',
+            'max' => 'Input :attribute harus diisi maksimal :max karakter!',
+        ];
+
+        $request->validate([
+            'nama' => 'required|min:5|max:20',
+            'alamat' => 'required|regex:/^[a-zA-Z0-9\s,.]+$/',
+        ], $messages);
+
         $nama = $request->input('nama');
         $alamat = $request->input('alamat');
 

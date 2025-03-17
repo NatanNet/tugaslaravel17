@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SessionController;
+use App\Http\Controllers\CobaController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\SessionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,6 +18,8 @@ Route::get('session/delete',[SessionController::class, 'delete']);
 Route::get('/pegawai/{nama}', [PegawaiController::class, 'index']);
 
 // menangkao data melalui inputan
-Route::get('formulir', [PegawaiController::class,'formulir']);
+Route::get('/formulir', [PegawaiController::class,'formulir']);
 
-Route::post('formulir/proses', [PegawaiController::class, 'proses']);
+Route::post('/formulir/proses', [PegawaiController::class, 'proses']);
+
+Route::get('/cobaerror/{nama?}',[CobaController::class, 'index']);
