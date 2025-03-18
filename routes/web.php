@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CobaController;
+use App\Http\Controllers\UploadController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\SessionController;
 
@@ -23,3 +24,9 @@ Route::get('/formulir', [PegawaiController::class,'formulir']);
 Route::post('/formulir/proses', [PegawaiController::class, 'proses']);
 
 Route::get('/cobaerror/{nama?}',[CobaController::class, 'index']);
+
+//acara19 upload
+
+Route::get('/upload',[UploadController::class, 'upload'])->name('upload');
+
+Route::post('/upload/proses', [UploadController::class,'proses_upload']); //haa dicobaaa
