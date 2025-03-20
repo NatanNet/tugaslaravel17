@@ -32,3 +32,13 @@ Route::get('/upload',[UploadController::class, 'upload'])->name('upload');
 Route::post('/upload/proses', [UploadController::class,'prosesUpload'])->name('upload.proses'); //haa dicobaaa
 
 Route::post('/resize/upload', [UploadController::class, 'resizeImage'])->name('upload.resize');
+
+//acara 20
+Route::get('/dropzone', [UploadController::class, 'dropzone'])->name('dropzone');
+
+Route::post('/dropzone/store', [UploadController::class, 'dropzone_store'])->name('dropzone.store');
+
+//untuk pdf
+Route::get('/pdf_upload', [UploadController::class, 'pdf_upload'])->name('pdf.upload');
+
+Route::post('/pdf/store', [UploadController::class, 'pdf_store'])->name('pdf.store');
