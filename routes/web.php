@@ -29,4 +29,6 @@ Route::get('/cobaerror/{nama?}',[CobaController::class, 'index']);
 
 Route::get('/upload',[UploadController::class, 'upload'])->name('upload');
 
-Route::post('/upload/proses', [UploadController::class,'proses_upload']); //haa dicobaaa
+Route::post('/upload/proses', [UploadController::class,'prosesUpload'])->name('upload.proses'); //haa dicobaaa
+
+Route::post('/resize/upload', [UploadController::class, 'resizeImage'])->name('upload.resize');

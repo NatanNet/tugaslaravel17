@@ -2,43 +2,76 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
+//use Illuminate\Http\Request;
+//use Intervention\Image\Image;
+//use Illuminate\Support\Facades\File; 
+//use Intervention\Image\Facades\Image;
+//use Intervention\Image\ImageManager;
+//use Intervention\Image\ImageManagerStatic as Image;
+
 
 class UploadController extends Controller
-{
-    //tambahan
-    public function upload(){
-        return view('upload'); // Pastikan ada file upload.blade.php di resources/views
-    }
-
-    public function proses_upload(Request $request){
-        $request->validate([
-            'file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',  //ada tambahan
-            'keterangan' => 'required|string',
-        ]);
-
-        // menyimpan data file yang diupload ke variabel $file
-        $file = $request->file('file');
-
-        // nama file
-        echo 'File Name: '.$file->getClientOriginalName().'<br>';
-
-        // ekstensi file
-        echo 'File Extension: '.$file->getClientOriginalExtension().'<br>';
-
-        // real path
-        echo 'File Real Path: '.$file->getRealPath().'<br>';
-
-        // ukuran file
-        echo 'File Size: '.$file->getSize().'<br>';
-
-        // tipe mime
-        echo 'File Mime Type: '.$file->getMimeType().'<br>';
-
-        // isi dengan nama folder tempat kemana file diupload
-        $tujuan_upload = 'data_file';
-
-        // upload file
-        $file->move($tujuan_upload, $file->getClientOriginalName());
-    }
-}
+ {
+     public function upload()
+     {
+         return view("upload");
+     }
+ 
+     public function prosesUpload(Request $request)
+     {
+         $request->validate([
+             "file"=> "required",
+             "keterangan"=> "required",
+         ]);
+ 
+         $file = $request->file("file");
+ 
+         echo 'File Name: ' . $file->getClientOriginalName(). '<br>';
+         echo 'File Exension: ' . $file->getClientOriginalExtension() . '<br>';
+         echo 'File Real path: ' . $file->getRealPath() . '<br>';
+         echo 'File Size: ' . $file->getSize() . '<br>';
+         echo 'File Mime Type: ' . $file->getMimeType() . '<br>';
+ 
+         $tujuanUpload = 'data_file';
+         $file->move($tujuanUpload, $file->getClientOriginalName());
+     }
+ 
+     public function resizeImage(Request $request)
+     {
+         $request->validate([
+             "file" => "required",
+             "keterangan" => "required",
+         ]);
+ 
+         $path = public_path("img/logo");
+ 
+         if (!File::isDirectory($path)) {
+             File::makeDirectory($path,0777, true);
+         }
+ 
+         $file = $request->file("file");
+         $fileName = 'logo'. uniqid() . '.' . $file->getClientOriginalExtension();
+ 
+         $file->move($path, $fileName);
+ 
+         $manager = new ImageManager(new Driver());
+         $image = $manager->read($path . '/' . $fileName);
+ 
+         $canvas = $image->resizeCanvas(200, 200, 'fff');
+ 
+         $resizeImage = $image->scale(200);
+ 
+         $canvas->place($resizeImage, 'center');
+ 
+         if ($canvas->save($path . '/' . $fileName)) {
+             return redirect()->route('upload')->with('success','Data berhasil ditambahkan');
+         } else {
+             return redirect()->route('upload')->with('error', 'Data gagal ditambahkan');
+         }
+     }
+ }
